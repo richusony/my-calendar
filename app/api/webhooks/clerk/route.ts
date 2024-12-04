@@ -1,9 +1,11 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
+import { createUser } from '@/lib/actions/user.action'
+import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET
+  const SIGNING_SECRET = process.env.WEBHOOK_SIGNING_SECRET
 
   if (!SIGNING_SECRET) {
     throw new Error('Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local')
@@ -49,6 +51,28 @@ export async function POST(req: Request) {
   // For this guide, log payload to console
   const { id } = evt.data
   const eventType = evt.type
+
+  // Create and store user in Postgres
+  if (eventType === "user.created") {
+    const { id, email_addresses, first_name } = evt.data;
+
+    const user = {
+        clerkId: id,
+        firstName: first_name,
+        email: email_addresses[0].email_address
+    }
+
+    const newUser = await createUser(user);
+    // if(newUser) {
+    //     (await clerkClient()).users.updateUserMetadata(id,{
+    //         publicMetadata: {
+    //             userId: newUser.id
+    //         }
+    //     })
+    // }
+
+    return NextResponse.json({message: "New User Created", user: newUser});
+  }
   console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
   console.log('Webhook payload:', body)
 
