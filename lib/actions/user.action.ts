@@ -1,6 +1,6 @@
 "use server"
 
-import {} from "@prisma/client";
+import { } from "@prisma/client";
 import prisma from "../prisma";
 
 type UserType = {
@@ -8,7 +8,7 @@ type UserType = {
     firstName: string | null;
     email: string;
 }
-export async function createUser(user:UserType) {
+export async function createUser(user: UserType) {
     // add user to postgres using primsa
     try {
         const addUser = await prisma.user.create({
@@ -20,6 +20,7 @@ export async function createUser(user:UserType) {
         });
         return addUser;
     } catch (error) {
-        console.log(error);
+        console.error("Error creating user:", error);
+        throw new Error("Failed to create user");
     }
 }
