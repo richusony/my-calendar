@@ -9,4 +9,5 @@ type UserType = {
 }
 export async function createUser(user:UserType) {
     // add user to postgres using primsa
+    console.log(user);
 }
