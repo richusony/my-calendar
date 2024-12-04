@@ -1,9 +1,8 @@
 "use client"
 import axios from "axios";
-import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 const signUp = () => {
-  const user = useUser();
   const data = {
     id: 1,
     name: "Richu Sony",
@@ -13,9 +12,8 @@ const signUp = () => {
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const reqData = user
-    // const res = await axios.post("http://localhost:3000/signup/api", reqData);
-    console.log(user);
+  
+    await axios.post("http://localhost:3000/signup/api", data);
   }
 
   return (
