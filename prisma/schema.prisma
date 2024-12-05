@@ -14,9 +14,20 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  clerkId   String   @unique
-  email     String   @unique
+  id        Int         @id @default(autoincrement())
+  clerkId   String      @unique
+  email     String      @unique
   firstName String?
-  createdAt DateTime @default(now())
+  createdAt DateTime    @default(now())
+  events    UserEvent[]
+}
+
+model UserEvent {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  event_name String
+  event_url  String?
+  event_time String?
+  event_date String
 }
