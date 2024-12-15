@@ -1,16 +1,43 @@
 "use client"
 import axios from "axios";
 import useStore from "@/zustand/store";
-import { EventType } from "../types/types";
+import { MdDelete } from "react-icons/md";
+import { MdModeEdit } from "react-icons/md";
 import { isValidUrl } from "@/utils/helper";
 import { IoCloseSharp } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
-import { ChangeEvent, FormEvent, useState } from "react";
+import { EventType, UserEventType } from "../types/types";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const AddEventBox = () => {
-    const { addEventBoxState, addEventToggle, selectedDate, currentMonth, currentYear } = useStore();
+    const {
+        addEventBoxState,
+        addEventToggle,
+        selectedDate,
+        currentMonth,
+        currentYear,
+        editEventToggle,
+        setEditEventData
+    } = useStore();
+    const [selectedDateEvents, setSelectedDateEvents] = useState<UserEventType[] | null>(null);
+
+    useEffect(() => {
+        getSelectedDateEventsIfAny();
+    });
 
     const newDate = new Date(currentYear, currentMonth, selectedDate);
+    const getSelectedDateEventsIfAny = async () => {
+        const selectedDate = {
+            dateString: newDate.toLocaleDateString()
+        };
+
+        try {
+            const { data } = await axios.post(`http://localhost:3000/api/get-event`, selectedDate);
+            setSelectedDateEvents(data);
+        } catch {
+
+        }
+    }
 
     const [formData, setFormData] = useState<EventType>({
         eventName: "",
@@ -58,8 +85,40 @@ const AddEventBox = () => {
         }
     }
 
+    const handleEditEvent = async (userEvent: UserEventType) => {
+        setEditEventData(userEvent);
+        editEventToggle();
+    }
+
+    const handleDeleteEvent = async (eventId: number) => {
+        if (!eventId) return toast("eventId is required for deleting", { theme: "dark", type: "warning" });
+        try {
+           await axios.delete(`http://localhost:3000/api/delete-event/` + eventId);
+           return toast("Post Deleted Succefully", { theme: "dark", type: "success" });
+        } catch {
+            return toast("Something went wrong!!", { theme: "dark", type: "error" });
+        }
+    }
+
     return (
-        <div key={`addEventBox`} className={`transition-all delay-300 ease-linear absolute w-full right-0 ${addEventBoxState ? "top-80" : `bottom-full`} h-screen rounded-t-xl bg-gray-900`}>
+        <div key={`addEventBox`} className={`pb-10 transition-all delay-300 ease-linear absolute w-full right-0 ${addEventBoxState ? "top-80" : `bottom-full`} min-h-screen rounded-t-xl bg-gray-900 overflow-hidden`}>
+            {
+                selectedDateEvents &&
+                <section className="mt-10 mx-auto px-2 py-2 grid sm:grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {
+                        selectedDateEvents.map((userEvent) => (
+                            <div key={`userEvent` + userEvent.id} className={`mx-auto transition-all delay-300 ease-linear px-2 py-2 text-center w-80 border rounded-md text-gray-300 rounded-t-xl bg-gray-900 shadow-md`}>
+                                <h1 className="px-1 flex justify-end text-lg"><MdModeEdit onClick={() => handleEditEvent(userEvent)} className="cursor-pointer" /></h1>
+                                <h1 className="mb-2 text-xl font-bold">{userEvent?.event_name}</h1>
+                                <h1>{userEvent?.event_url}</h1>
+                                <h3>{userEvent?.event_time}</h3>
+                                <h1 className="px-1 flex justify-end text-lg"><MdDelete onClick={() => handleDeleteEvent(userEvent.id)} className="cursor-pointer" /></h1>
+                            </div>
+                        ))
+                    }
+                </section>
+            }
+
             <h1 className="mt-5 text-2xl font-semibold text-gray-300 text-center">Add Event</h1>
             <span onClick={addEventToggle} className="absolute top-4 right-4 text-white text-3xl cursor-pointer"><IoCloseSharp /></span>
 
