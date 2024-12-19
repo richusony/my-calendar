@@ -5,7 +5,7 @@ import { getAuth } from "@clerk/nextjs/server";
 export async function POST(req: NextRequest) {
     const reqData = await req.json();
     const { userId } = getAuth(req);
-    console.log("date string ::", reqData.dateString);
+    
     if (!userId) return new Response("User Not Authorized", { status: 401 });
     try {
         const userExists = await prisma.user.findFirst({
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
                 event_date: reqData?.dateString
             }
         });
-        console.log("userEvents ::: ",userEvents);
+        
         return new Response(JSON.stringify(userEvents), {
             status: 200, headers: {
                 "Content-Type": "application/json"

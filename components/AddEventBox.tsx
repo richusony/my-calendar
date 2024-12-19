@@ -23,7 +23,7 @@ const AddEventBox = () => {
 
     useEffect(() => {
         getSelectedDateEventsIfAny();
-    });
+    },[selectedDate]);
 
     const newDate = new Date(currentYear, currentMonth, selectedDate);
     const getSelectedDateEventsIfAny = async () => {
@@ -91,9 +91,13 @@ const AddEventBox = () => {
     }
 
     const handleDeleteEvent = async (eventId: number) => {
+        const confirm = window.confirm("Are you sure?");
+        if(!confirm) return;
+
         if (!eventId) return toast("eventId is required for deleting", { theme: "dark", type: "warning" });
         try {
            await axios.delete(`http://localhost:3000/api/delete-event/` + eventId);
+           setSelectedDateEvents(selectedDateEvents?.filter(eve => eve.id !== eventId) || null);
            return toast("Post Deleted Succefully", { theme: "dark", type: "success" });
         } catch {
             return toast("Something went wrong!!", { theme: "dark", type: "error" });
@@ -111,7 +115,7 @@ const AddEventBox = () => {
                                 <h1 className="px-1 flex justify-end text-lg"><MdModeEdit onClick={() => handleEditEvent(userEvent)} className="cursor-pointer" /></h1>
                                 <h1 className="mb-2 text-xl font-bold">{userEvent?.event_name}</h1>
                                 <h1>{userEvent?.event_url}</h1>
-                                <h3>{userEvent?.event_time}</h3>
+                                <input type="time" disabled defaultValue={userEvent?.event_time || ""} name={`event_recieved_time_${userEvent.id}`} id={`event_recieved_time_${userEvent.id}`} className="bg-transparent" />
                                 <h1 className="px-1 flex justify-end text-lg"><MdDelete onClick={() => handleDeleteEvent(userEvent.id)} className="cursor-pointer" /></h1>
                             </div>
                         ))

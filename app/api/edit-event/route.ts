@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
-import { UserEventType } from "@/types/types";
 import { NextRequest } from "next/server";
+import { UserEventType } from "@/types/types";
 import { getAuth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {

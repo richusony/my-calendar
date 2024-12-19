@@ -2,7 +2,8 @@ import { UserEventType } from "@/types/types";
 import { create } from "zustand";
 
 const date = new Date();
-const currentDate = date.getDay() + 1;
+
+const currentDate = date.getUTCDate();
 const currentMonth = date.getMonth();
 const currentYear = date.getFullYear();
 

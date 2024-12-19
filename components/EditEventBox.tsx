@@ -34,7 +34,8 @@ const EditEventBox = () => {
 
         try {
             await axios.post("http://localhost:3000/api/edit-event", formData);
-            return toast("Event edited successfully", { theme: "dark", type: "success" });
+            toast("Event edited successfully", { theme: "dark", type: "success" });
+            return window.location.reload();
         } catch {
             return toast("Something Went Wrong", { theme: "dark", type: "error" });
         }
