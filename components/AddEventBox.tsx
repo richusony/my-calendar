@@ -32,7 +32,7 @@ const AddEventBox = () => {
         };
 
         try {
-            const { data } = await axios.post(`http://localhost:3000/api/get-event`, selectedDate);
+            const { data } = await axios.post(`https://my-calendar-nqs6.onrender.com/api/get-event`, selectedDate);
             setSelectedDateEvents(data);
         } catch {
 
@@ -78,7 +78,7 @@ const AddEventBox = () => {
         }
 
         try {
-            await axios.post("http://localhost:3000/api/add-event", formData);
+            await axios.post("https://my-calendar-nqs6.onrender.com/api/add-event", formData);
             return toast("Event Added successfully", { theme: "dark", type: "success" });
         } catch {
             return toast("Something Went Wrong", { theme: "dark", type: "error" });
@@ -96,7 +96,7 @@ const AddEventBox = () => {
 
         if (!eventId) return toast("eventId is required for deleting", { theme: "dark", type: "warning" });
         try {
-           await axios.delete(`http://localhost:3000/api/delete-event/` + eventId);
+           await axios.delete(`https://my-calendar-nqs6.onrender.com/api/delete-event/` + eventId);
            setSelectedDateEvents(selectedDateEvents?.filter(eve => eve.id !== eventId) || null);
            return toast("Post Deleted Succefully", { theme: "dark", type: "success" });
         } catch {

@@ -33,7 +33,7 @@ const EditEventBox = () => {
         }
 
         try {
-            await axios.post("http://localhost:3000/api/edit-event", formData);
+            await axios.post("https://my-calendar-nqs6.onrender.com/api/edit-event", formData);
             toast("Event edited successfully", { theme: "dark", type: "success" });
             return window.location.reload();
         } catch {
