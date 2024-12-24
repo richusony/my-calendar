@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const domain = process.env.BACKEND_DOMAIN;
+const domain = process.env.BACKEND_DOMAIN || "https://my-calendar-nqs6.onrender.com";
 
 const axiosInstance = axios.create({
   baseURL: `${domain}`, // Replace with your API base URL
