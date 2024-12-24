@@ -1,9 +1,10 @@
 "use client"
-import axios from "axios";
+
 import useStore from "@/zustand/store";
 import { MdDelete } from "react-icons/md";
 import { MdModeEdit } from "react-icons/md";
 import { isValidUrl } from "@/utils/helper";
+import axiosInstance from "@/axios.config.js";
 import { IoCloseSharp } from "react-icons/io5";
 import { ToastContainer, toast } from 'react-toastify';
 import { EventType, UserEventType } from "../types/types";
@@ -32,7 +33,7 @@ const AddEventBox = () => {
         };
 
         try {
-            const { data } = await axios.post(`https://my-calendar-nqs6.onrender.com/api/get-event`, selectedDate);
+            const { data } = await axiosInstance.post(`/api/get-event`, selectedDate);
             setSelectedDateEvents(data);
         } catch {
 
@@ -78,7 +79,7 @@ const AddEventBox = () => {
         }
 
         try {
-            await axios.post("https://my-calendar-nqs6.onrender.com/api/add-event", formData);
+            await axiosInstance.post("/api/add-event", formData);
             return toast("Event Added successfully", { theme: "dark", type: "success" });
         } catch {
             return toast("Something Went Wrong", { theme: "dark", type: "error" });
@@ -96,7 +97,7 @@ const AddEventBox = () => {
 
         if (!eventId) return toast("eventId is required for deleting", { theme: "dark", type: "warning" });
         try {
-           await axios.delete(`https://my-calendar-nqs6.onrender.com/api/delete-event/` + eventId);
+           await axiosInstance.delete(`/api/delete-event/` + eventId);
            setSelectedDateEvents(selectedDateEvents?.filter(eve => eve.id !== eventId) || null);
            return toast("Post Deleted Succefully", { theme: "dark", type: "success" });
         } catch {

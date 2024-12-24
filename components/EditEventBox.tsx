@@ -1,9 +1,9 @@
 "use client"
 
-import axios from "axios";
 import useStore from "@/zustand/store";
 import { toast } from "react-toastify";
 import { isValidUrl } from "@/utils/helper";
+import axiosInstance from "@/axios.config.js"
 import { IoCloseSharp } from "react-icons/io5";
 import { ChangeEvent, FormEvent, useState } from "react";
 
@@ -33,7 +33,7 @@ const EditEventBox = () => {
         }
 
         try {
-            await axios.post("https://my-calendar-nqs6.onrender.com/api/edit-event", formData);
+            await axiosInstance.post("/api/edit-event", formData);
             toast("Event edited successfully", { theme: "dark", type: "success" });
             return window.location.reload();
         } catch {

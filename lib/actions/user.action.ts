@@ -1,6 +1,5 @@
 "use server"
 
-import { } from "@prisma/client";
 import prisma from "../prisma";
 
 type UserType = {
