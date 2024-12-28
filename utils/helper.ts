@@ -9,3 +9,5 @@ export function isValidUrl(url: string): boolean {
         return false;
     }
 }
+
+export const faviconUrl = "https://t4.ftcdn.net/jpg/07/52/67/23/360_F_752672349_aJ2NUPiRqZJSWKYKEYsluWBBlOpo0tWX.jpg";

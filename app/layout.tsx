@@ -1,11 +1,12 @@
 import "./globals.css";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { ClerkProvider, UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
-import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "My Calender",
-  description: "Created for scheduling tasks"
+  title: "My Calendar",
+  description: "Created for scheduling tasks",
+  icons: "https://t4.ftcdn.net/jpg/07/52/67/23/360_F_752672349_aJ2NUPiRqZJSWKYKEYsluWBBlOpo0tWX.jpg"
 };
 
 export default function RootLayout({
